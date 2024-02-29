@@ -76,7 +76,7 @@ jobs:
       CACHE_REPO: igorferreir4/buildcaches
       CACHE_AMD64: caddy-2.7.6-amd64
       CACHE_ARM64: caddy-2.7.6-arm64
-      IMAGE_REPO: igorferreir4/registrator
+      IMAGE_REPO: igorferreir4/caddy
       IMAGE_TAGS: 2.7.6,latest
     working_directory: ~/project/src/2.7.6
     steps:
