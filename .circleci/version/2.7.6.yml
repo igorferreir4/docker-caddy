@@ -36,7 +36,7 @@ commands:
             echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
 
 jobs:
-  build-cache-amd64:
+  2.7.6-cache-amd64:
     executor: docker-machine
     environment:
       CACHE_REPO: igorferreir4/buildcaches
@@ -56,7 +56,7 @@ jobs:
               --cache-from="$CACHE_REPO:$CACHE_TAG" \
               --cache-to=type=registry,ref=$CACHE_REPO:$CACHE_TAG,mode=max .
 
-  build-cache-arm64:
+  2.7.6-cache-arm64:
     executor: docker-machine
     resource_class: arm.large
     environment:
@@ -77,7 +77,7 @@ jobs:
               --cache-from="$CACHE_REPO:$CACHE_TAG" \
               --cache-to=type=registry,ref=$CACHE_REPO:$CACHE_TAG,mode=max .
 
-  build-multi-arch:
+  2.7.6-build-multi-arch:
     executor: docker-machine
     resource_class: large
     environment:
@@ -104,7 +104,7 @@ jobs:
                   --cache-from="$CACHE_REPO:$CACHE_ARM64" \
                   --push --platform=linux/amd64,linux/arm64/v8 $TAGS .
 
-  deploy:
+  2.7.6-deploy:
     executor: docker-docker
     steps:
       # - add_ssh_keys:
@@ -130,19 +130,19 @@ workflows:
         - << pipeline.parameters.build-and-push >>
         - << pipeline.parameters.run-all >>
     jobs:
-      - build-cache-amd64:
+      - 2.7.6-cache-amd64:
           context: docker-geral
 
-      - build-cache-arm64:
+      - 2.7.6-cache-arm64:
           context: docker-geral
 
-      - build-multi-arch:
+      - 2.7.6-build-multi-arch:
           context: docker-geral
           requires:
-            - build-cache-amd64
-            - build-cache-arm64
+            - 2.7.6-cache-amd64
+            - 2.7.6-cache-arm64
 
-      - deploy:
+      - 2.7.6-deploy:
           context: docker-geral
           requires:
-            - build-multi-arch
+            - 2.7.6-build-multi-arch
